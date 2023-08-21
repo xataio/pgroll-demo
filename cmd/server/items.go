@@ -7,8 +7,9 @@ import (
 )
 
 type item struct {
-	Name string `json:"name"`
-	Done bool   `json:"done"`
+	Name     string `json:"name"`
+	Assignee string `json:"assignee"`
+	Done     bool   `json:"done"`
 }
 
 func (s *Server) handleItems(w http.ResponseWriter, r *http.Request) {
@@ -23,7 +24,7 @@ func (s *Server) handleItems(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) handleGetItems(w http.ResponseWriter, r *http.Request) {
-	rows, err := s.db.Query("SELECT name, done FROM items")
+	rows, err := s.db.Query("SELECT name, assignee, done FROM items")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -33,7 +34,7 @@ func (s *Server) handleGetItems(w http.ResponseWriter, r *http.Request) {
 	items := []item{}
 	for rows.Next() {
 		var i item
-		err := rows.Scan(&i.Name, &i.Done)
+		err := rows.Scan(&i.Name, &i.Assignee, &i.Done)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
@@ -58,8 +59,9 @@ func (s *Server) handlePostItem(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var id int
-	err = s.db.QueryRow("INSERT INTO items (name, done) VALUES ($1, $2) RETURNING id",
+	err = s.db.QueryRow("INSERT INTO items (name, assignee, done) VALUES ($1, $2, $3) RETURNING id",
 		item.Name,
+		item.Assignee,
 		item.Done).Scan(&id)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

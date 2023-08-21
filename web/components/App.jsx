@@ -57,13 +57,15 @@ const Button = styled.button`
 
 const App = () => {
   const [name, setName] = useState("");
+  const [assignee, setAssignee] = useState("");
   const { data, error } = useSWR("items", fetcher, { refreshInterval: 1000 });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await createItem({ name });
+    await createItem({ name, assignee });
     mutate("items");
     setName("");
+    setAssignee("");
   };
 
   console.log(`API_URL is ${process.env.API_URL}`);
@@ -84,6 +86,14 @@ const App = () => {
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
+            <div>
+              <label htmlFor="assignee">Assignee:</label>
+              <Input
+                id="assignee"
+                value={assignee}
+                onChange={(e) => setAssignee(e.target.value)}
+              />
+            </div>
             <Button type="submit">Add Item</Button>
           </form>
         </FormContainer>
@@ -93,12 +103,14 @@ const App = () => {
             <thead>
               <tr>
                 <TableHeader>Name</TableHeader>
+                <TableHeader>Assignee</TableHeader>
               </tr>
             </thead>
             <tbody>
               {data.map((item, i) => (
                 <tr key={i}>
                   <TableCell>{item.name}</TableCell>
+                  <TableCell>{item.assignee}</TableCell>
                 </tr>
               ))}
             </tbody>

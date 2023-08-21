@@ -24,7 +24,7 @@ services:
       - "8080:8080"
     environment:
       PG_URL: postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable
-      DB_VERSION: public_01_create_items_table
+      DB_VERSION: public_02_add_assignee_column
     depends_on: 
       postgres:
         condition: service_healthy

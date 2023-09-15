@@ -1,0 +1,9 @@
+operations:
+  - alter_column:
+      table: items
+      column: assignee
+      check:
+        name: items_assignee_check
+        constraint: "assignee IN ('alice', 'bob')"
+      up: "(SELECT CASE WHEN assignee in ('alice', 'bob') THEN assignee ELSE 'alice' END)"
+      down: assignee

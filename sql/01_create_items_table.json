@@ -1,5 +1,4 @@
 {
-  "name": "01_create_items_table",
   "operations": [
     {
       "create_table": {
@@ -18,6 +17,11 @@
             "name": "done",
             "type": "boolean",
             "default": "false"
+          },
+          {
+            "name": "assignee",
+            "type": "text",
+            "nullable": true
           }
         ]
       }

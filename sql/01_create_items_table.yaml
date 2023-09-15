@@ -1,0 +1,15 @@
+operations:
+  - create_table:
+      name: items
+      columns:
+        - name: id
+          type: serial
+          pk: true
+        - name: name
+          type: text
+        - name: done
+          type: boolean
+          default: "false"
+        - name: assignee
+          type: text
+          nullable: true

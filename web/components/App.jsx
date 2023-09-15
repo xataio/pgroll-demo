@@ -40,6 +40,13 @@ const Input = styled.input`
   border-radius: 5px;
 `;
 
+const Select = styled.select`
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+`;
+
 const Button = styled.button`
   background-color: #007bff;
   color: white;
@@ -57,7 +64,7 @@ const Button = styled.button`
 
 const App = () => {
   const [name, setName] = useState("");
-  const [assignee, setAssignee] = useState("");
+  const [assignee, setAssignee] = useState("alice");
   const { data, error } = useSWR("items", fetcher, { refreshInterval: 1000 });
 
   const handleSubmit = async (e) => {
@@ -65,7 +72,6 @@ const App = () => {
     await createItem({ name, assignee });
     mutate("items");
     setName("");
-    setAssignee("");
   };
 
   console.log(`API_URL is ${process.env.API_URL}`);
@@ -73,7 +79,7 @@ const App = () => {
   return (
     <AppContainer>
       <header>
-        <h1>Todo List V1</h1>
+        <h1>Todo List V2</h1>
       </header>
       <main>
         <FormContainer>
@@ -88,11 +94,13 @@ const App = () => {
             </div>
             <div>
               <label htmlFor="assignee">Assignee:</label>
-              <Input
-                id="assignee"
-                value={assignee}
+              <Select
                 onChange={(e) => setAssignee(e.target.value)}
-              />
+                value={assignee}
+              >
+                <option value="alice">Alice</option>
+                <option value="bob">Bob</option>
+              </Select>
             </div>
             <Button type="submit">Add Item</Button>
           </form>

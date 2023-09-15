@@ -18,6 +18,11 @@
             "name": "done",
             "type": "boolean",
             "default": "false"
+          },
+          {
+            "name": "assignee",
+            "type": "text",
+            "nullable": true
           }
         ]
       }

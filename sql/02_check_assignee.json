@@ -1,0 +1,15 @@
+{
+  "name": "02_check_assignee",
+  "operations": [
+    {
+      "alter_column": {
+        "table": "items",
+        "column": "assignee",
+        "constraint_name": "items_assignee_check",
+        "check": "assignee IN ('alice', 'bob')",
+        "up": "(SELECT CASE WHEN assignee in ('alice', 'bob') THEN assignee ELSE 'alice' END)",
+        "down": "assignee"
+      }
+    }
+  ]
+}

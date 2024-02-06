@@ -1,0 +1,26 @@
+{
+  "name": "01_create_items_table",
+  "operations": [
+    {
+      "create_table": {
+        "name": "items",
+        "columns": [
+          {
+            "name": "id",
+            "type": "serial",
+            "pk": true
+          },
+          {
+            "name": "name",
+            "type": "text"
+          },
+          {
+            "name": "done",
+            "type": "boolean",
+            "default": "false"
+          }
+        ]
+      }
+    }
+  ]
+}

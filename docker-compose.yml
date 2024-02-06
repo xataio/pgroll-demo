@@ -1,0 +1,107 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "postgres"]
+      interval: 1s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      PG_URL: postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable
+      DB_VERSION: public_01_create_items_table
+    depends_on: 
+      postgres:
+        condition: service_healthy
+        restart: true
+    profiles: ['dev']
+
+  api_v1:
+    image: pg-roll-demo:v1
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+      - API_URL=http://localhost:8080/api
+    ports:
+      - "8080:8080"
+    environment:
+      PG_URL: postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable
+      DB_VERSION: public_01_create_items_table
+    depends_on: 
+      postgres:
+        condition: service_healthy
+        restart: true
+    profiles: ['demo', 'v1']
+
+  api_v2:
+    image: pg-roll-demo:v2
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+      - API_URL=http://localhost:8081/api
+    ports:
+      - "8081:8080"
+    environment:
+      PG_URL: postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable
+      DB_VERSION: public_02_add_assignee_column
+    depends_on: 
+      postgres:
+        condition: service_healthy
+        restart: true
+    profiles: ['demo', 'v2']
+
+  api_v3:
+    image: pg-roll-demo:v3
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+      - API_URL=http://localhost:8080/api
+    ports:
+      - "8080:8080"
+    environment:
+      PG_URL: postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable
+      DB_VERSION: public_01_create_items_table
+    depends_on: 
+      postgres:
+        condition: service_healthy
+        restart: true
+    profiles: ['demo2', 'v3']
+
+  api_v4:
+    image: pg-roll-demo:v4
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+      - API_URL=http://localhost:8081/api
+    ports:
+      - "8081:8080"
+    environment:
+      PG_URL: postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable
+      DB_VERSION: public_02_check_assignee
+    depends_on: 
+      postgres:
+        condition: service_healthy
+        restart: true
+    profiles: ['demo2', 'v4']
+
+volumes:
+  pg_data:

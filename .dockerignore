@@ -1,0 +1,4 @@
+cmd/server/dist
+web/.parcel-cache
+web/node_modules
+web/dist

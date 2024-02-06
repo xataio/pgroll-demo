@@ -1,0 +1,16 @@
+{
+  "name": "02_add_assignee_column",
+  "operations": [
+    {
+      "add_column": {
+        "table": "items",
+        "up": "'UNASSIGNED'",
+        "column": {
+          "name": "assignee",
+          "type": "text",
+          "nullable": false
+        }
+      }
+    }
+  ]
+}

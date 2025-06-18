@@ -166,6 +166,24 @@ const Input = styled.input`
   }
 `;
 
+const Select = styled.select`
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-family: inherit;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: all 0.2s ease-in-out;
+  
+  &:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--primary-light);
+  }
+`;
+
 const ButtonContainer = styled.div`
   grid-column: 1 / -1;
   display: flex;
@@ -232,7 +250,7 @@ const ErrorMessage = styled.div`
 
 const App = () => {
   const [name, setName] = useState("");
-  const [assignee, setAssignee] = useState("");
+  const [assignee, setAssignee] = useState("alice");
   const { data, error } = useSWR("items", fetcher, { refreshInterval: 1000 });
 
   const handleSubmit = async (e) => {
@@ -240,7 +258,6 @@ const App = () => {
     await createItem({ name, assignee });
     mutate("items");
     setName("");
-    setAssignee("");
   };
 
   console.log(`API_URL is ${process.env.API_URL}`);
@@ -250,7 +267,7 @@ const App = () => {
       <GlobalStyle />
       <AppContainer>
         <Header>
-          <h1>Todo List V1</h1>
+          <h1>Todo List V2</h1>
         </Header>
         <Main>
           <FormContainer>
@@ -268,13 +285,14 @@ const App = () => {
                 </FormField>
                 <FormField>
                   <Label htmlFor="assignee">Assignee</Label>
-                  <Input
+                  <Select
                     id="assignee"
-                    placeholder="Enter assignee name..."
-                    value={assignee}
                     onChange={(e) => setAssignee(e.target.value)}
-                    required
-                  />
+                    value={assignee}
+                  >
+                    <option value="alice">Alice</option>
+                    <option value="bob">Bob</option>
+                  </Select>
                 </FormField>
                 <ButtonContainer>
                   <Button type="submit">Add Task</Button>
